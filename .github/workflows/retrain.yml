@@ -1,0 +1,33 @@
+name: MLflow Retraining Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: |
+          pip install -r Workflow-CI/MLProject/requirements.txt
+
+      - name: Run MLflow Project
+        run: |
+          cd Workflow-CI/MLProject
+          mlflow run . --env-manager=local
